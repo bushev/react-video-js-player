@@ -14,9 +14,7 @@ class VideoPlayer extends Component {
 
     componentWillReceiveProps(nextProps){
         this.set_controls_visibility(this.player, nextProps.hideControls);
-        if(this.props.src !== nextProps.src){
-            this.init_player(nextProps);
-        }
+        this.init_player(nextProps);
     }
 
     componentWillUnmount() {
@@ -26,13 +24,13 @@ class VideoPlayer extends Component {
     init_player(props) {
         const playerOptions = this.generate_player_options(props);
         this.player = videojs(document.querySelector(`#${this.playerId}`), playerOptions);
-        this.player.src(props.src)
         this.player.poster(props.poster)
         this.set_controls_visibility(this.player, props.hideControls);
     }
 
     generate_player_options(props){
         const playerOptions = {};
+        playerOptions.sources = props.sources;
         playerOptions.controls = props.controls;
         playerOptions.autoplay = props.autoplay;
         playerOptions.preload = props.preload;
@@ -96,7 +94,10 @@ class VideoPlayer extends Component {
 }
 
 VideoPlayer.propTypes = {
-    src: PropTypes.string,
+    sources: PropTypes.arrayOf(PropTypes.shape({
+        src: PropTypes.string,
+        type: PropTypes.number
+    })),
     poster: PropTypes.string,
     controls: PropTypes.bool,
     autoplay: PropTypes.bool,
@@ -119,7 +120,7 @@ VideoPlayer.propTypes = {
 }
 
 VideoPlayer.defaultProps = {
-    src: "",
+    sources: [],
     poster: "",
     controls: true,
     autoplay: false,
