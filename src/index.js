@@ -14,7 +14,9 @@ class VideoPlayer extends Component {
 
     componentWillReceiveProps(nextProps){
         this.set_controls_visibility(this.player, nextProps.hideControls);
-        this.init_player(nextProps);
+        if(this.props.sources.length !== nextProps.sources.length) {
+          this.init_player(nextProps);
+        }
     }
 
     componentWillUnmount() {
